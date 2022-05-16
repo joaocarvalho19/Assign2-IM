@@ -60,6 +60,8 @@ namespace AppGui
 
         }
 
+        //KANT
+
         private void MmiC_Message(object sender, MmiEventArgs e)
         {
             Console.WriteLine(e.Message);
@@ -70,7 +72,7 @@ namespace AppGui
             Shape _s = null;
             switch ((string)json.recognized[0].ToString())
             {
-                case "SQUARE": _s = rectangle;
+                case "KING": _s = rectangle;
                     break;
                 case "CIRCLE": _s = circle;
                     break;

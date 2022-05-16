@@ -121,3 +121,31 @@ C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersion
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\AppGui\AppGui\obj\Debug\AppGui.csproj.CopyComplete
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\AppGui\AppGui\obj\Debug\AppGui.exe
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\AppGui\AppGui\obj\Debug\AppGui.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\NUnit3.TestAdapter.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\NUnit3.TestAdapter.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\nunit.engine.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\nunit.engine.api.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\nunit.engine.core.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\testcentric.engine.metadata.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\AppGui.exe.config
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\AppGui.exe
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\AppGui.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\Newtonsoft.Json.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\nunit.framework.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\WebDriver.dll
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\Newtonsoft.Json.xml
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\bin\Debug\nunit.framework.xml
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.csproj.AssemblyReference.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.csproj.SuggestedBindingRedirects.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\MainWindow.g.cs
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\App.g.cs
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui_MarkupCompile.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui_MarkupCompile.lref
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\MainWindow.baml
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.g.resources
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.Properties.Resources.resources
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.csproj.GenerateResource.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.csproj.CoreCompileInputs.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.csproj.CopyComplete
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.exe
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\AppGui\AppGui\obj\Debug\AppGui.pdb

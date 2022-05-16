@@ -10,6 +10,8 @@ namespace speechModality
     {
         public string Text { get; set; }
         public double Confidence { get; set; }
+
+        public string Semantics { get; set; }
         public bool Final { get; set; }
     }
 }

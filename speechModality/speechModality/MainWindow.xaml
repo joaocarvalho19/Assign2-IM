@@ -9,6 +9,7 @@
     <Grid>
         <TextBox x:Name="result" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
         <TextBox x:Name="confidence" HorizontalAlignment="Left" Height="40" Margin="10,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
+        <TextBox x:Name="semantics" HorizontalAlignment="Left" Height="40" Margin="10,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
 
     </Grid>
 </Window>

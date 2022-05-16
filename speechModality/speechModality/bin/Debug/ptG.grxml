@@ -1,29 +1,248 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+	
+	
 	<rule id="rootRule" scope="public">
-	  <item>
-		  <item>
-			<ruleref uri="#object"/>
-			<tag>out.shape=rules.latest();</tag>
-		  </item>
-		  <item>
-			<ruleref uri="#color"/>
-			<tag>out.color=rules.latest();</tag>
-		  </item>
-	  </item>
+		<one-of>
+			 
+			<item>
+				<ruleref uri ="#MovePiece"/>
+				<tag> out.MovePiece = rules.MovePiece</tag>
+			</item>
+			
+			
+
+			<item>
+				<ruleref uri ="#ChangeColor"/>
+				<tag> out.ChangeColor = rules.ChangeColor</tag>
+			</item>
+
+			
+			<item>
+				<ruleref uri ="#NewGame"/>
+				<tag> out.NewGame = rules.NewGame</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#StartGame"/>
+				<tag> out.StartGame = rules.StartGame</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#GiveUp"/>
+				<tag> out.GiveUp = rules.GiveUp</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#Undo"/>
+				<tag> out.Undo = rules.Undo</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#Redo"/>
+				<tag> out.Undo = rules.Undo</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#Hint"/>
+				<tag> out.Hint = rules.latest()</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#Options"/>
+				<tag> out.Options = rules.Options</tag>
+			</item>
+			
+		</one-of>	  
 	</rule>
+
+
+	<rule id="ChangeColor" scope="public">
+		
+		<item repeat="0-1"> por favor </item>
+		<item>mudar cor</item>
+		<item repeat="0-1"> para </item>
+		<ruleref uri="#colours"/>
+		<tag> out = rules.colours; </tag>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="MovePiece" scope="public">
+		
+		<item repeat="0-1"> por favor </item>
+		<item>move</item>
+		<ruleref uri="#object"/>
+		<ruleref uri="#quantity"/>
+		<item repeat="0-1"> casa </item>
+		<item repeat="0-1"> para </item>
+		<item repeat="0-1"> a </item>
+		<ruleref uri="#directionsud"/>
+	</rule>
+
+	<rule id="NewGame" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>começa novo jogo</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="StartGame" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>comeca</item>
+		<item repeat="0-1"> um </item>
+		<item>jogo</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="GiveUp" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>desiste</item>
+		<item repeat="0-1"> do </item>
+		<item>jogo</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="Undo" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>desfaz</item>
+		<item repeat="0-1"> último </item>
+		<item>movimento</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="Redo" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>refaz</item>
+		<item repeat="0-1"> último </item>
+		<item>movimento</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="Hint" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item> dá <tag> out.comando = "GIVE"</tag>
+	</item>
+		<item repeat="0-1"> me </item>
+		<item repeat="0-1"> uma </item>
+		<item>dica <tag> out.parametro = "CLUE"</tag>
+	</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="Options" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item> abre </item>
+		<item repeat="0-1"> as </item>
+		<item > opções </item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+	
+	
+
 	<rule id="object">
-	  <one-of>
-		<item>quadrado<tag>out="SQUARE"</tag></item>
-		<item>círculo<tag>out="CIRCLE"</tag></item>
-		<item>triângulo<tag>out="TRIANGLE"</tag></item>
-	  </one-of>
+		<one-of>
+			<item>
+				peão<tag>out="PAWN"</tag>
+			</item>
+			<item>
+				rainha<tag>out="QUEEN"</tag>
+			</item>
+			<item>
+				rei<tag>out="KING"</tag>
+			</item>
+			<item>
+				torre<tag>out="ROOK"</tag>
+			</item>
+			<item>
+				cavalo<tag>out="KNIGHT"</tag>
+			</item>
+			<item>
+				bispo<tag>out="BISHOP"</tag>
+			</item>
+
+
+		</one-of>
 	</rule>
-	<rule id="color">
-	  <one-of>
-		<item>verde<tag>out="GREEN"</tag></item>
-		<item>azul<tag>out="BLUE"</tag></item>
-		<item>vermelho<tag>out="RED"</tag></item>
-	  </one-of>
+
+	<rule id="directionsud">
+		<one-of>
+			<item>
+				cima<tag>out="UP"</tag>
+			</item>
+
+			<item>
+				baixo<tag>out="DOWN"</tag>
+			</item>
+		</one-of>
 	</rule>
+
+
+
+
+
+	<rule id="quantity">
+		<one-of>
+			<item>
+				um<tag>out="ONE"</tag>
+			</item>
+			<item>
+				dois<tag>out="TWO"</tag>
+			</item>
+			<item>
+				três<tag>out="THREE"</tag>
+			</item>
+			<item>
+				quatro<tag>out="FOUR"</tag>
+			</item>
+			<item>
+				cinco<tag>out="FIVE"</tag>
+			</item>
+			<item>
+				seis<tag>out="SIX"</tag>
+			</item>
+			<item>
+				sete<tag>out="SEVEN"</tag>
+			</item>
+			<item>
+				oito<tag>out="EIGHT"</tag>
+			</item>
+		</one-of>
+	</rule>
+	
+	
+	
+	
+
+	<rule id="colours">
+		<one-of>
+			<item>
+				verde<tag>out="GREEN"</tag>
+			</item>
+			<item>
+				azul<tag>out="BLUE"</tag>
+			</item>
+			<item>
+				laranja<tag>out="ORANGE"</tag>
+			</item>
+			<item>
+				cor de laranja<tag>out="ORANGE"</tag>
+			</item>
+			<item>
+				roxo<tag>out="PURPLE"</tag>
+			</item>
+			<item>
+				violeta<tag>out="PURPLE"</tag>
+			</item>
+			<item>
+				vermelho<tag>out="RED"</tag>
+			</item>
+			<item>
+				encarnado<tag>out="RED"</tag>
+			</item>
+			<item>
+				castanho<tag>out="BROWN"</tag>
+			</item>
+
+		</one-of>
+	</rule>
+	
 </grammar>

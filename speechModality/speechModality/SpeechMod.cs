@@ -69,14 +69,14 @@ namespace speechModality
 
     private void Sre_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
         {
-            onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Final = false });
+            onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Semantics = e.Result.Semantics.ToString(), Final = false });
         }
 
         //
         private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Final = true });
-
+            Console.WriteLine(e.Result.Semantics);
             //SEND
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
             string json = "{ \"recognized\": [";
@@ -86,6 +86,8 @@ namespace speechModality
             }
             json = json.Substring(0, json.Length - 2);
             json += "] }";
+
+            Console.WriteLine(json);
 
             var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime + "", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration) + "", e.Result.Confidence, json);
             mmic.Send(exNot);

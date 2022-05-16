@@ -99,3 +99,23 @@ C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersion
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\speechModality\speechModality\obj\Debug\speechModality.csproj.CopyComplete
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\speechModality\speechModality\obj\Debug\speechModality.exe
 C:\Users\joaoc\OneDrive\Ambiente de Trabalho\MEI\IM\Basis4Assignment2_newVersionApril2020\speechModality\speechModality\obj\Debug\speechModality.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\bin\Debug\ptG.grxml
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\bin\Debug\speechModality.exe.config
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\bin\Debug\speechModality.exe
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\bin\Debug\speechModality.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\bin\Debug\mmisharp.pdb
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.csproj.AssemblyReference.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.csproj.SuggestedBindingRedirects.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\MainWindow.g.cs
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\App.g.cs
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality_Content.g.cs
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality_MarkupCompile.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality_MarkupCompile.lref
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\MainWindow.baml
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.g.resources
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.Properties.Resources.resources
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.csproj.GenerateResource.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.csproj.CoreCompileInputs.cache
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.csproj.CopyComplete
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.exe
+C:\Users\maria\Source\Repos\joaocarvalho19\Assign2-IM\speechModality\speechModality\obj\Debug\speechModality.pdb
