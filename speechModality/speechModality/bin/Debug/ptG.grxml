@@ -10,8 +10,6 @@
 				<tag> out.MovePiece = rules.MovePiece</tag>
 			</item>
 			
-			
-
 			<item>
 				<ruleref uri ="#ChangeColor"/>
 				<tag> out.ChangeColor = rules.ChangeColor</tag>
@@ -40,12 +38,12 @@
 
 			<item>
 				<ruleref uri ="#Redo"/>
-				<tag> out.Undo = rules.Undo</tag>
+				<tag> out.Redo = rules.Redo</tag>
 			</item>
 
 			<item>
 				<ruleref uri ="#Hint"/>
-				<tag> out.Hint = rules.latest()</tag>
+				<tag> out.Hint = rules.Hint</tag>
 			</item>
 
 			<item>
@@ -63,7 +61,6 @@
 		<item>mudar cor</item>
 		<item repeat="0-1"> para </item>
 		<ruleref uri="#colours"/>
-		<tag> out = rules.colours; </tag>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
@@ -71,17 +68,69 @@
 		
 		<item repeat="0-1"> por favor </item>
 		<item>move</item>
-		<ruleref uri="#object"/>
-		<ruleref uri="#quantity"/>
+		<ruleref uri="#Object"/>
+		<tag> out = rules.latest(); </tag>
+		
+		<ruleref uri="#Quantity"/>
+		<tag> out = out + " " + rules.latest(); </tag>
+		
 		<item repeat="0-1"> casa </item>
+		<item repeat="0-1"> casas </item>
 		<item repeat="0-1"> para </item>
 		<item repeat="0-1"> a </item>
-		<ruleref uri="#directionsud"/>
+		
+		
+		<item repeat="0-1">
+			<ruleref uri="#directionsud"/>
+			<tag> out = out + " " + rules.latest(); </tag>
+		</item>
+
+		<item repeat="0-1">
+
+			<ruleref uri="#directionsdiag"/>
+			<tag> out = out + " " + rules.latest(); </tag>
+
+			<ruleref uri="#directionsrl"/>
+			<tag> out = out + " " + rules.latest(); </tag>
+		</item>
+
+		<item repeat="0-1">
+			<ruleref uri="#directionsrl"/>
+			<tag> out = out + " " + rules.latest(); </tag>
+		</item>
+
+		
+
+		
+		
+	</rule>
+
+	<rule id="directionsrl">
+		<one-of>
+			<item>
+				direita<tag>out="RIGHT"</tag>
+			</item>
+
+			<item>
+				esquerda<tag>out="LEFT"</tag>
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="directionsdiag">
+		<one-of>
+			<item>
+				diagonal<tag>out="DIAGONAL"</tag>
+			</item>
+
+		</one-of>
 	</rule>
 
 	<rule id="NewGame" scope="public">
 		<item repeat="0-1"> por favor </item>
-		<item>começa novo jogo</item>
+		<item>
+			começa novo jogo<tag>out="NEWGAME"</tag>
+		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
@@ -89,13 +138,17 @@
 		<item repeat="0-1"> por favor </item>
 		<item>comeca</item>
 		<item repeat="0-1"> um </item>
-		<item>jogo</item>
+		<item>
+			jogo <tag>out="STARTGAME"</tag>
+		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
 	<rule id="GiveUp" scope="public">
 		<item repeat="0-1"> por favor </item>
-		<item>desiste</item>
+		<item>
+			desiste <tag>out="GIVEUP"</tag>
+		</item>
 		<item repeat="0-1"> do </item>
 		<item>jogo</item>
 		<item repeat="0-1"> por favor </item>
@@ -105,7 +158,9 @@
 		<item repeat="0-1"> por favor </item>
 		<item>desfaz</item>
 		<item repeat="0-1"> último </item>
-		<item>movimento</item>
+		<item>
+			movimento <tag>out="UNDO"</tag>
+		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
@@ -113,18 +168,18 @@
 		<item repeat="0-1"> por favor </item>
 		<item>refaz</item>
 		<item repeat="0-1"> último </item>
-		<item>movimento</item>
+		<item>
+			movimento <tag> out="REDO" </tag>
+		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
 	<rule id="Hint" scope="public">
 		<item repeat="0-1"> por favor </item>
-		<item> dá <tag> out.comando = "GIVE"</tag>
-	</item>
+		<item> dá </item>
 		<item repeat="0-1"> me </item>
 		<item repeat="0-1"> uma </item>
-		<item>dica <tag> out.parametro = "CLUE"</tag>
-	</item>
+		<item>dica <tag>out="CLUE"</tag> </item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
@@ -132,13 +187,15 @@
 		<item repeat="0-1"> por favor </item>
 		<item> abre </item>
 		<item repeat="0-1"> as </item>
-		<item > opções </item>
+		<item>
+			opções <tag>out="OPTIONS"</tag>
+		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 	
 	
 
-	<rule id="object">
+	<rule id="Object">
 		<one-of>
 			<item>
 				peão<tag>out="PAWN"</tag>
@@ -179,7 +236,7 @@
 
 
 
-	<rule id="quantity">
+	<rule id="Quantity">
 		<one-of>
 			<item>
 				um<tag>out="ONE"</tag>
