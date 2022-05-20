@@ -50,6 +50,33 @@
 				<ruleref uri ="#Options"/>
 				<tag> out.Options = rules.Options</tag>
 			</item>
+
+			<item>
+				<ruleref uri ="#DeactivateSound"/>
+				<tag> out.DeactivateSound = rules.DeactivateSound</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#ActivateSound"/>
+				<tag> out.ActivateSound = rules.ActivateSound</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#ScrollDown"/>
+				<tag> out.ScrollDown = rules.ScrollDown</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#ScrollUp"/>
+				<tag> out.ScrollUp = rules.ScrollUp</tag>
+			</item>
+
+			<item>
+				<ruleref uri ="#Knight"/>
+				<tag> out.Knight = rules.Knight</tag>
+			</item>
+			
+			
 			
 		</one-of>	  
 	</rule>
@@ -64,40 +91,161 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	<rule id="DeactivateSound" scope="public">
+
+		<item repeat="0-1"> por favor </item>
+
+		<one-of>
+			<item>desativa</item>
+			<item>desliga</item>
+			
+		</one-of>
+		
+		<item repeat="0-1"> o </item>
+		<one-of>
+			<item>som<tag> out="NOSOUND"</tag>
+		</item>
+			<item> volume<tag> out="NOSOUND"</tag>
+		</item>
+			
+			
+
+		</one-of>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="ActivateSound" scope="public">
+
+		<item repeat="0-1"> por favor </item>
+
+		<one-of>
+			<item>ativa</item>
+			<item>liga</item>
+
+		</one-of>
+		<item repeat="0-1"> o </item>
+		<one-of>
+			<item>
+				som<tag> out="SOUND"</tag>
+			</item>
+			<item>
+				volume<tag> out="SOUND"</tag>
+			</item>
+
+
+
+		</one-of>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
 	<rule id="MovePiece" scope="public">
 		
 		<item repeat="0-1"> por favor </item>
 		<item>move</item>
-		<ruleref uri="#Object"/>
-		<tag> out = rules.latest(); </tag>
-		
-		<ruleref uri="#Quantity"/>
-		<tag> out = out + " " + rules.latest(); </tag>
-		
-		<item repeat="0-1"> casa </item>
-		<item repeat="0-1"> casas </item>
-		<item repeat="0-1"> para </item>
-		<item repeat="0-1"> a </item>
 		
 		
-		<item repeat="0-1">
-			<ruleref uri="#directionsud"/>
-			<tag> out = out + " " + rules.latest(); </tag>
-		</item>
+		
 
-		<item repeat="0-1">
+		<one-of>
+			<item>
 
-			<ruleref uri="#directionsdiag"/>
-			<tag> out = out + " " + rules.latest(); </tag>
+				<ruleref uri="#Object"/>
+				<tag> out = rules.latest(); </tag>
 
-			<ruleref uri="#directionsrl"/>
-			<tag> out = out + " " + rules.latest(); </tag>
-		</item>
+				<ruleref uri="#Quantity"/>
+				<tag> out = out + " " + rules.latest(); </tag>
 
-		<item repeat="0-1">
-			<ruleref uri="#directionsrl"/>
-			<tag> out = out + " " + rules.latest(); </tag>
-		</item>
+				<one-of>
+					<item repeat="0-1">posições</item>
+					<item repeat="0-1">casas</item>
+				</one-of>
+
+				<item repeat="0-1"> para </item>
+				<item repeat="0-1"> a </item>
+
+
+				<item repeat="0-1">
+					<ruleref uri="#directionsud"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+				</item>
+
+				<item repeat="0-1">
+
+					<ruleref uri="#directionsdiag"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+
+					<ruleref uri="#directionsrl"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+				</item>
+
+				<item repeat="0-1">
+					<ruleref uri="#directionsrl"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+				</item>
+			</item>
+
+			<item>
+
+				<ruleref uri="#Knight"/>
+				<tag> out = rules.latest(); </tag>
+
+				<ruleref uri="#Quantity"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+				<one-of>
+					<item>posições</item>
+					<item>casas</item>
+				</one-of>
+
+				<item repeat="0-1"> para </item>
+
+				<one-of>
+					<item>
+						<ruleref uri="#directionsrl"/>
+						<tag> out = out + " " + rules.latest(); </tag>
+					</item>
+
+					<item>
+						<ruleref uri="#directionsud"/>
+						<tag> out = out + " " + rules.latest(); </tag>
+					</item>
+
+				</one-of>
+
+				<item repeat="0-1"> e </item>
+
+				<ruleref uri="#Quantity"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+				
+				<one-of>
+					<item>posições</item>
+					<item>casas</item>
+				</one-of>
+
+				<item repeat="0-1"> para </item>
+
+				<one-of>
+					<item>
+						<ruleref uri="#directionsrl"/>
+						<tag> out = out + " " + rules.latest(); </tag>
+					</item>
+
+					<item>
+						<ruleref uri="#directionsud"/>
+						<tag> out = out + " " + rules.latest(); </tag>
+					</item>
+
+				</one-of>
+				
+				
+				
+				
+			</item>
+
+			<item repeat="0-1"> por favor </item>
+			
+			
+			
+		</one-of>
 
 		<!-- Falta movimentacao do cavalo!!!!!-->
 
@@ -194,6 +342,73 @@
 		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
+
+	<rule id="ScrollDown" scope="public">
+
+		<item repeat="0-1"> por favor </item>
+
+		<one-of>
+			<item>
+				<item> anda </item>
+				<item repeat="0-1"> para </item>
+				<item> baixo <tag> out = "SCROLLDOWN"</tag>
+			</item>
+			</item>
+
+			<item>
+				<item> dá scroll</item>
+				<item repeat="0-1"> para </item>
+				<item> baixo <tag> out = "SCROLLDOWN"</tag></item>
+			</item>
+
+			<item>
+				<item> desliza</item>
+				<item repeat="0-1"> para </item>
+				<item>
+					baixo <tag> out = "SCROLLDOWN"</tag>
+				</item>
+			</item>
+			
+		</one-of>
+		
+	
+		<item repeat="0-1"> por favor </item>
+	</rule>
+
+	<rule id="ScrollUp" scope="public">
+
+		<item repeat="0-1"> por favor </item>
+
+		<one-of>
+			<item>
+				<item> anda </item>
+				<item repeat="0-1"> para </item>
+				<item>
+					cima <tag> out = "SCROLLUP"</tag>
+				</item>
+			</item>
+
+			<item>
+				<item> dá scroll</item>
+				<item repeat="0-1"> para </item>
+				<item>
+					cima <tag> out = "SCROLLUP"</tag>
+				</item>
+			</item>
+
+			<item>
+				<item> desliza </item>
+				<item repeat="0-1"> para </item>
+				<item>
+					cima <tag> out = "SCROLLUP"</tag>
+				</item>
+			</item>
+
+		</one-of>
+
+
+		<item repeat="0-1"> por favor </item>
+	</rule>
 	
 	
 
@@ -211,15 +426,19 @@
 			<item>
 				torre<tag>out="ROOK"</tag>
 			</item>
-			<item>
-				cavalo<tag>out="KNIGHT"</tag>
-			</item>
+			
 			<item>
 				bispo<tag>out="BISHOP"</tag>
 			</item>
 
 
 		</one-of>
+	</rule>
+
+	<rule id ="Knight">
+		<item>
+			cavalo<tag>out="KNIGHT"</tag>
+		</item>
 	</rule>
 
 	<rule id="directionsud">
