@@ -128,6 +128,7 @@ namespace speechModality
             sre.RecognizeAsyncCancel();
 
             tts.SpeakAsync(text);
+            Console.WriteLine("-  DONE!  ");
         }
 
         public void Speak(string text, int rate)
@@ -174,8 +175,15 @@ namespace speechModality
             }
 
             //  new 16 april 2020
-            sre.SetInputToDefaultAudioDevice();
-            sre.RecognizeAsync(RecognizeMode.Multiple);
+            try { 
+                sre.SetInputToDefaultAudioDevice();
+                sre.RecognizeAsync(RecognizeMode.Multiple);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR {0}", ex);
+            }
+            
         }
     }
 }

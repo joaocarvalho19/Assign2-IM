@@ -11,14 +11,28 @@
 			</item>
 			
 			<item>
-				<ruleref uri ="#ChangeColor"/>
-				<tag> out.ChangeColor = rules.ChangeColor</tag>
+				<ruleref uri ="#ChangeBoardColor"/>
+				<tag> out.ChangeBoardColor = rules.ChangeBoardColor</tag>
 			</item>
-
+			
+			<item>
+				<ruleref uri ="#ChangeAppearancePieces"/>
+				<tag> out.ChangeAppearancePieces = rules.ChangeAppearancePieces</tag>
+			</item>
 			
 			<item>
 				<ruleref uri ="#NewGame"/>
 				<tag> out.NewGame = rules.NewGame</tag>
+			</item>
+			
+			<item>
+				<ruleref uri ="#Cancel"/>
+				<tag> out.Cancel = rules.Cancel</tag>
+			</item>
+			
+			<item>
+				<ruleref uri ="#Save"/>
+				<tag> out.Save = rules.Save</tag>
 			</item>
 
 			<item>
@@ -50,12 +64,17 @@
 				<ruleref uri ="#Options"/>
 				<tag> out.Options = rules.Options</tag>
 			</item>
-
+			
 			<item>
 				<ruleref uri ="#DeactivateSound"/>
 				<tag> out.DeactivateSound = rules.DeactivateSound</tag>
 			</item>
-
+			
+			<item>
+				<ruleref uri ="#ActivateSound"/>
+				<tag> out.ActivateSound = rules.ActivateSound</tag>
+			</item>
+			
 			<item>
 				<ruleref uri ="#ActivateSound"/>
 				<tag> out.ActivateSound = rules.ActivateSound</tag>
@@ -65,7 +84,7 @@
 				<ruleref uri ="#ScrollDown"/>
 				<tag> out.ScrollDown = rules.ScrollDown</tag>
 			</item>
-
+			
 			<item>
 				<ruleref uri ="#ScrollUp"/>
 				<tag> out.ScrollUp = rules.ScrollUp</tag>
@@ -76,29 +95,34 @@
 				<tag> out.Knight = rules.Knight</tag>
 			</item>
 			
-			
-			
 		</one-of>	  
 	</rule>
 
 
-	<rule id="ChangeColor" scope="public">
+	<rule id="ChangeBoardColor" scope="public">
 		
 		<item repeat="0-1"> por favor </item>
-		<item>mudar cor</item>
-		<item repeat="0-1"> para </item>
-		<ruleref uri="#colours"/>
+		<item>muda cor</item>
+		<item repeat="0-1"> do </item>
+		<item>tabuleiro <tag>out="BOARD_COLOR"</tag> </item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
-
-	<rule id="DeactivateSound" scope="public">
-
+	
+	<rule id="ChangeAppearancePieces" scope="public">
+		
 		<item repeat="0-1"> por favor </item>
-
+		<item>muda aspeto</item>
+		<item repeat="0-1"> das </item>
+		<item>peças <tag>out="PIECE_APPEARANCE"</tag> </item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+	
+	<rule id="DeactivateSound" scope="public">
+		<item repeat="0-1"> por favor </item>
+		
 		<one-of>
 			<item>desativa</item>
 			<item>desliga</item>
-			
 		</one-of>
 		
 		<item repeat="0-1"> o </item>
@@ -107,22 +131,18 @@
 		</item>
 			<item> volume<tag> out="NOSOUND"</tag>
 		</item>
-			
-			
 
 		</one-of>
 		<item repeat="0-1"> por favor </item>
 	</rule>
-
+	
 	<rule id="ActivateSound" scope="public">
-
 		<item repeat="0-1"> por favor </item>
-
 		<one-of>
 			<item>ativa</item>
 			<item>liga</item>
-
 		</one-of>
+		
 		<item repeat="0-1"> o </item>
 		<one-of>
 			<item>
@@ -142,9 +162,6 @@
 		
 		<item repeat="0-1"> por favor </item>
 		<item>move</item>
-		
-		
-		
 
 		<one-of>
 			<item>
@@ -235,24 +252,10 @@
 					</item>
 
 				</one-of>
-				
-				
-				
-				
 			</item>
 
 			<item repeat="0-1"> por favor </item>
-			
-			
-			
 		</one-of>
-
-		<!-- Falta movimentacao do cavalo!!!!!-->
-
-		
-
-		
-		
 	</rule>
 
 	<rule id="directionsrl">
@@ -289,7 +292,7 @@
 		<item>comeca</item>
 		<item repeat="0-1"> um </item>
 		<item>
-			jogo <tag>out="STARTGAME"</tag>
+			novo jogo <tag>out="STARTGAME"</tag>
 		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
@@ -301,6 +304,25 @@
 		</item>
 		<item repeat="0-1"> do </item>
 		<item>jogo</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+	
+	<rule id="Cancel" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>
+			cancela <tag>out="CANCEL"</tag>
+		</item>
+		<item repeat="0-1">alteraçoes</item>
+		<item repeat="0-1"> por favor </item>
+	</rule>
+	
+	<rule id="Save" scope="public">
+		<item repeat="0-1"> por favor </item>
+		<item>
+			guarda <tag>out="SAVE"</tag>
+		</item>
+		
+		<item repeat="0-1">alteraçoes</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
@@ -337,28 +359,35 @@
 		<item repeat="0-1"> por favor </item>
 		<item> abre </item>
 		<item repeat="0-1"> as </item>
-		<item>
-			opções <tag>out="OPTIONS"</tag>
-		</item>
+		<one-of>
+			<item>
+				opções <tag>out="OPTIONS"</tag>
+			</item>
+
+			<item>
+				definições <tag>out="OPTIONS"</tag>
+			</item>
+		</one-of>
 		<item repeat="0-1"> por favor </item>
 	</rule>
-
+	
 	<rule id="ScrollDown" scope="public">
-
 		<item repeat="0-1"> por favor </item>
-
 		<one-of>
 			<item>
 				<item> anda </item>
 				<item repeat="0-1"> para </item>
-				<item> baixo <tag> out = "SCROLLDOWN"</tag>
-			</item>
+				<item> 
+					baixo <tag> out = "SCROLLDOWN"</tag>
+				</item>
 			</item>
 
 			<item>
 				<item> dá scroll</item>
 				<item repeat="0-1"> para </item>
-				<item> baixo <tag> out = "SCROLLDOWN"</tag></item>
+				<item> 
+					baixo <tag> out = "SCROLLDOWN"</tag>
+				</item>
 			</item>
 
 			<item>
@@ -374,11 +403,9 @@
 	
 		<item repeat="0-1"> por favor </item>
 	</rule>
-
+	
 	<rule id="ScrollUp" scope="public">
-
 		<item repeat="0-1"> por favor </item>
-
 		<one-of>
 			<item>
 				<item> anda </item>
@@ -405,12 +432,8 @@
 			</item>
 
 		</one-of>
-
-
 		<item repeat="0-1"> por favor </item>
 	</rule>
-	
-	
 
 	<rule id="Object">
 		<one-of>
@@ -430,11 +453,9 @@
 			<item>
 				bispo<tag>out="BISHOP"</tag>
 			</item>
-
-
 		</one-of>
 	</rule>
-
+	
 	<rule id ="Knight">
 		<item>
 			cavalo<tag>out="KNIGHT"</tag>
@@ -452,11 +473,8 @@
 			</item>
 		</one-of>
 	</rule>
-
-
-
-
-
+	
+	
 	<rule id="Quantity">
 		<one-of>
 			<item>
@@ -486,41 +504,5 @@
 		</one-of>
 	</rule>
 	
-	
-	
-	
-
-	<rule id="colours">
-		<one-of>
-			<item>
-				verde<tag>out="GREEN"</tag>
-			</item>
-			<item>
-				azul<tag>out="BLUE"</tag>
-			</item>
-			<item>
-				laranja<tag>out="ORANGE"</tag>
-			</item>
-			<item>
-				cor de laranja<tag>out="ORANGE"</tag>
-			</item>
-			<item>
-				roxo<tag>out="PURPLE"</tag>
-			</item>
-			<item>
-				violeta<tag>out="PURPLE"</tag>
-			</item>
-			<item>
-				vermelho<tag>out="RED"</tag>
-			</item>
-			<item>
-				encarnado<tag>out="RED"</tag>
-			</item>
-			<item>
-				castanho<tag>out="BROWN"</tag>
-			</item>
-
-		</one-of>
-	</rule>
-	
 </grammar>
+

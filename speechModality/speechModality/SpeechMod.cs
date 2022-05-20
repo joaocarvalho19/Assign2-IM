@@ -106,7 +106,7 @@ namespace speechModality
 
         private void MmiReceived_Message(object sender, MmiEventArgs e)
         {
-            Console.WriteLine(e.Message);
+            //Console.WriteLine(e.Message);
 
             var doc = XDocument.Parse(e.Message);
             var com = doc.Descendants("command").FirstOrDefault().Value;
@@ -118,22 +118,20 @@ namespace speechModality
 
             //dynamic json = JsonConvert.DeserializeObject(com);
 
-            /*
-            Shape _s = null;
-            switch ((string)json.recognized[0].ToString())
+            //switch ((string)json.recognized[0].ToString())
+            switch (com)
             {
-                case "SQUARE":
-                    _s = rectangle;
+                case "GIVEUP":
+                    tts.Speak("O jogo foi abortado. Deseja começar um novo?");
                     break;
-                case "CIRCLE":
-                    _s = circle;
+
+                case "NEWGAME":
+                    tts.Speak("Pode começar. Boa sorte!");
                     break;
-                case "TRIANGLE":
-                    _s = triangle;
-                    break;
+
             }
 
-            App.Current.Dispatcher.Invoke(() =>
+            /*App.Current.Dispatcher.Invoke(() =>
             {
                 switch ((string)json.recognized[1].ToString())
                 {

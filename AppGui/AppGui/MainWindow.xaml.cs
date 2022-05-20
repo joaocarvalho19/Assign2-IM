@@ -69,15 +69,23 @@ namespace AppGui
          // Move a Piece
         public void move(string piece, string _to)
         {
-            Actions action = new Actions(driver);
-            string class_coord = coordinates[piece];
-            IWebElement piece_from = driver.FindElement(By.ClassName(class_coord));
-            piece_from.Click();
+            try
+            {
+                Actions action = new Actions(driver);
+                string class_coord = coordinates[piece];
+                IWebElement piece_from = driver.FindElement(By.ClassName(class_coord));
+                piece_from.Click();
 
-            System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(1000);
 
-            IWebElement piece_to = driver.FindElement(By.ClassName(_to));
-            action.ClickAndHold(piece_from).MoveToElement(piece_to).Release().Build().Perform();
+                IWebElement piece_to = driver.FindElement(By.ClassName(_to));
+                action.ClickAndHold(piece_from).MoveToElement(piece_to).Release().Build().Perform();
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR moving a piece {0}", e);
+            }
+
         }
 
         // Abort the game
@@ -96,6 +104,69 @@ namespace AppGui
                 Console.WriteLine("ERROR {0}", e);
             }
     
+        }
+        public void start_new_game()
+        {
+            try
+            {
+                IList<IWebElement> controlsButtoms = driver.FindElements(By.ClassName("game-over-controls-buttonlg"));
+                IWebElement new_gameButtom = controlsButtoms[1];
+                new_gameButtom.Click();
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR Starting new game {0}", e);
+            }
+
+        }
+
+        public void undo_move()
+        {
+            try
+            {
+                IList<IWebElement> controlsButtoms = driver.FindElements(By.ClassName("primary-controls-button"));
+                IWebElement undoButtom = controlsButtoms[1];
+                undoButtom.Click();
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR undo a move {0}", e);
+            }
+
+        }
+
+        public void redo_move()
+        {
+            try
+            {
+                IList<IWebElement> controlsButtoms = driver.FindElements(By.ClassName("primary-controls-button"));
+                IWebElement undoButtom = controlsButtoms[2];
+                undoButtom.Click();
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR redo a move {0}", e);
+            }
+
+        }
+
+        public void show_clue()
+        {
+            try
+            {
+                IList<IWebElement> controlsButtoms = driver.FindElements(By.ClassName("primary-controls-button"));
+                IWebElement undoButtom = controlsButtoms[3];
+                undoButtom.Click();
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR show a clue {0}", e);
+            }
+
         }
 
         // Simple click on the page
@@ -118,23 +189,59 @@ namespace AppGui
         }
 
         // Change the color of the board
-        public void change_color(string color)
+        public void change_color()
         {
-            // "circle-gearwheel" -- settings
-
-            try{
-                click("circle-gearwheel");
-                System.Threading.Thread.Sleep(3000);
+            try {
                 // Get all elements with a given ClassName
-            
+
                 IList<IWebElement> all = driver.FindElements(By.ClassName("settings-select"));
 
+                //Get a random index
+                Random r = new Random();
+                int index = r.Next(1, 29); //for ints
                 //create select element object 
                 var selectElement = new SelectElement(all[1]);
 
                 //select by value
-                selectElement.SelectByIndex(2);
-                System.Threading.Thread.Sleep(3000);
+                selectElement.SelectByIndex(index);
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR {0}", e);
+            }
+
+        }
+
+        public void change_pieces()
+        {
+            try
+            {
+                // Get all elements with a given ClassName
+
+                IList<IWebElement> all = driver.FindElements(By.ClassName("settings-select"));
+
+                //Get a random index
+                Random r = new Random();
+                int index = r.Next(1, 38); //for ints
+                //create select element object 
+                var selectElement = new SelectElement(all[0]);
+
+                //select by value
+                selectElement.SelectByIndex(index);
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR {0}", e);
+            }
+
+        }
+        public void save_options()
+        {
+            try
+            {
+                //Save
                 IList<IWebElement> settingsButtons = driver.FindElements(By.ClassName("settings-modal-container-button"));
 
                 IWebElement saveButtom = settingsButtons[1];
@@ -143,10 +250,69 @@ namespace AppGui
             }
             catch (WebDriverException e)
             {
+                Console.WriteLine("ERROR saving {0}", e);
+            }
+        }
+
+        public void cancel_options()
+        {
+            // "circle-gearwheel" -- settings
+
+            try
+            {
+                //Cancel
+                IList<IWebElement> settingsButtons = driver.FindElements(By.ClassName("settings-modal-container-button"));
+
+                IWebElement cancelButtom = settingsButtons[0];
+                cancelButtom.Click();
+
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR cancel {0}", e);
+            }
+        }
+
+        public void sounds()
+        {
+            // "circle-gearwheel" -- settings
+            
+            try
+            {
+                IList<IWebElement> all = driver.FindElements(By.ClassName("ui_v5-switch-button"));
+
+                // Get all elements with a given ClassName
+                IWebElement soundsButton = all[1];
+                soundsButton.Click();
+
+                
+            }
+            catch (WebDriverException e)
+            {
                 Console.WriteLine("ERROR {0}", e);
             }
-            
+
         }
+
+        public void scroll_options()
+        {
+            // "circle-gearwheel" -- settings
+
+            try
+            {
+                IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+                System.Threading.Thread.Sleep(500);
+                IWebElement Element = driver.FindElement(By.XPath("//*[@id='board-layout-chessboard']/div[4]/div[2]/div[1]/div/div[12]/div[1]"));
+                js.ExecuteScript("arguments[0].scrollIntoView();", Element);
+                Console.Read();
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR {0}", e);
+            }
+
+        }
+
 
         // Start de browser
         [SetUp]
@@ -182,15 +348,18 @@ namespace AppGui
             get_coordinates();
             foreach (KeyValuePair<string, string> kvp in coordinates)
             {
-                //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                 Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
             
             start_Browser();
             move("white_pawn_5", "square-54");
-            /*change_color("blue");
-            System.Threading.Thread.Sleep(5000);
-            abort_game();*/
+            /*System.Threading.Thread.Sleep(3000);
+            show_clue();
+            System.Threading.Thread.Sleep(3000);
+            open_settings();
+            System.Threading.Thread.Sleep(3000);
+            change_color();*/
+
         }
 
         private void MmiC_Message(object sender, MmiEventArgs e)
@@ -206,22 +375,44 @@ namespace AppGui
             //switch (obj)
             switch ((string)json.recognized[0].ToString())
             {
-                case "ABORT":
-                    //_s = rectangle;
+                case "GIVEUP":
                     abort_game();
                     break;
-                case "abre definições":
-                    //_s = rectangle;
+                case "NEWGAME":
+                    start_new_game();
+                    break;
+                case "OPTIONS":
                     open_settings();
                     break;
-                case "SQUARE": _s = rectangle;
+                case "UNDO":
+                    undo_move();
                     break;
-                case "BLUE":
-                    change_color("blue");
+                case "REDO":
+                    redo_move();
                     break;
-                case "CIRCLE": _s = circle;
+                case "CLUE":
+                    show_clue();
                     break;
-                case "TRIANGLE": _s = triangle;
+                case "BOARD_COLOR":
+                    change_color();
+                    break;
+                case "PIECE_APPEARANCE":
+                    change_pieces();
+                    break;
+                case "SAVE":
+                    save_options();
+                    break;
+                case "CANCEL":
+                    cancel_options();
+                    break;
+                case "SCROLLDOWN":
+                    scroll_options();
+                    break;
+                case "NOSOUND":
+                    sounds();
+                    break;
+                case "SOUND":
+                    sounds();
                     break;
             }
 
@@ -245,7 +436,7 @@ namespace AppGui
             mmic.Send(lce.NewContextRequest());
 
             string json2 = ""; // "{ \"synthesize\": [";
-            json2 += (string)json.recognized[0].ToString()+ " ";
+            json2 += (string)json.recognized[0].ToString();
             //json2 += (string)json.recognized[1].ToString() + " DONE." ;
             //json2 += "] }";
             /*
