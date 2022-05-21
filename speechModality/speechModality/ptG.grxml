@@ -90,24 +90,25 @@
 				<tag> out.ScrollUp = rules.ScrollUp</tag>
 			</item>
 
-			<item>
-				<ruleref uri ="#Knight"/>
-				<tag> out.Knight = rules.Knight</tag>
-			</item>
-			
 		</one-of>	  
 	</rule>
 
-
+	<!-- Change board color -->
 	<rule id="ChangeBoardColor" scope="public">
 		
 		<item repeat="0-1"> por favor </item>
 		<item>muda cor</item>
 		<item repeat="0-1"> do </item>
-		<item>tabuleiro <tag>out="BOARD_COLOR"</tag> </item>
+		<item>tabuleiro</item>
+		<item repeat="0-1"> para </item>
+		
+		<ruleref uri="#Colors"/>
+		<tag> out = rules.latest(); </tag>
+		
 		<item repeat="0-1"> por favor </item>
 	</rule>
-	
+
+	<!-- Change aspect of the pieces -->
 	<rule id="ChangeAppearancePieces" scope="public">
 		
 		<item repeat="0-1"> por favor </item>
@@ -116,7 +117,8 @@
 		<item>peças <tag>out="PIECE_APPEARANCE"</tag> </item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
-	
+
+	<!-- Deactivate sound -->
 	<rule id="DeactivateSound" scope="public">
 		<item repeat="0-1"> por favor </item>
 		
@@ -126,6 +128,7 @@
 		</one-of>
 		
 		<item repeat="0-1"> o </item>
+		
 		<one-of>
 			<item>som<tag> out="NOSOUND"</tag>
 		</item>
@@ -136,6 +139,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 	
+	
+	<!-- Activate sound -->	
 	<rule id="ActivateSound" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<one-of>
@@ -152,22 +157,61 @@
 				volume<tag> out="SOUND"</tag>
 			</item>
 
-
-
 		</one-of>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+
+	<!-- Move a piece -->
 	<rule id="MovePiece" scope="public">
 		
 		<item repeat="0-1"> por favor </item>
 		<item>move</item>
 
 		<one-of>
+			
+			<!-- pawn movements-->
+			<item>
+				
+				<ruleref uri="#Ordinals"/>
+				<tag> out = rules.latest(); </tag>
+				
+				<ruleref uri="#Pawn"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+
+				<ruleref uri="#Quantity"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+
+				<one-of>
+					<item repeat="0-1">posições</item>
+					<item repeat="0-1">casas</item>
+				</one-of>
+
+				<item repeat="0-1"> para </item>
+				<item repeat="0-1"> a </item>
+
+				<ruleref uri="#directionsud"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+			
+
+				
+			</item>
+
+
+			<!-- general movements-->			
 			<item>
 
 				<ruleref uri="#Object"/>
 				<tag> out = rules.latest(); </tag>
+
+				<item repeat="0-1">da</item>
+
+				
+				<!-- LOC- indicates whether the piece is located on the left or right -->
+				<item repeat ="0-1">
+					<ruleref uri="#directionsrl"/>
+					<tag> out = out + " LOC-" + rules.latest(); </tag>					
+				</item>
 
 				<ruleref uri="#Quantity"/>
 				<tag> out = out + " " + rules.latest(); </tag>
@@ -201,10 +245,17 @@
 				</item>
 			</item>
 
+			<!-- knight movements-->
 			<item>
 
 				<ruleref uri="#Knight"/>
 				<tag> out = rules.latest(); </tag>
+
+				<!-- LOC- indicates whether the piece is located on the left or right -->
+				<item repeat ="0-1">
+					<ruleref uri="#directionsrl"/>
+					<tag> out = out + " LOC-" + rules.latest(); </tag>
+				</item>
 
 				<ruleref uri="#Quantity"/>
 				<tag> out = out + " " + rules.latest(); </tag>
@@ -279,6 +330,7 @@
 		</one-of>
 	</rule>
 
+	<!-- start new game-->
 	<rule id="NewGame" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>
@@ -287,6 +339,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- start game-->
 	<rule id="StartGame" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>comeca</item>
@@ -297,6 +351,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- give up game-->
 	<rule id="GiveUp" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>
@@ -306,7 +362,9 @@
 		<item>jogo</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
+
 	
+	<!-- cancel options -->	
 	<rule id="Cancel" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>
@@ -315,7 +373,9 @@
 		<item repeat="0-1">alteraçoes</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
+
 	
+	<!-- save game-->
 	<rule id="Save" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>
@@ -326,6 +386,7 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	<!-- undo last move-->
 	<rule id="Undo" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>desfaz</item>
@@ -336,6 +397,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- redo last move -->
 	<rule id="Redo" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item>refaz</item>
@@ -346,6 +409,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- give hint -->
 	<rule id="Hint" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item> dá </item>
@@ -355,6 +420,8 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- open options -->
 	<rule id="Options" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<item> abre </item>
@@ -370,7 +437,9 @@
 		</one-of>
 		<item repeat="0-1"> por favor </item>
 	</rule>
+
 	
+	<!-- scroll down-->
 	<rule id="ScrollDown" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<one-of>
@@ -403,7 +472,9 @@
 	
 		<item repeat="0-1"> por favor </item>
 	</rule>
+
 	
+	<!-- scroll up-->
 	<rule id="ScrollUp" scope="public">
 		<item repeat="0-1"> por favor </item>
 		<one-of>
@@ -435,11 +506,11 @@
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
+	
+	<!-- objects with exception of the knight and pawn -->
 	<rule id="Object">
 		<one-of>
-			<item>
-				peão<tag>out="PAWN"</tag>
-			</item>
+			
 			<item>
 				rainha<tag>out="QUEEN"</tag>
 			</item>
@@ -455,33 +526,64 @@
 			</item>
 		</one-of>
 	</rule>
+
 	
+	<!-- object knight -->
 	<rule id ="Knight">
 		<item>
 			cavalo<tag>out="KNIGHT"</tag>
 		</item>
 	</rule>
 
+	
+	<!-- object pawn -->
+	<rule id ="Pawn">
+		<item>
+			peão<tag>out="PAWN"</tag>
+		</item>
+	</rule>
+
+	
+	<!-- up and down directions -->
 	<rule id="directionsud">
 		<one-of>
+			
+			<!-- up -->
 			<item>
-				cima<tag>out="UP"</tag>
+				<one-of>
+					<item>
+						cima<tag>out="UP"</tag>
+					</item>
+					<item>
+						frente<tag>out="UP"</tag>
+					</item>
+				</one-of>
 			</item>
 
+			<!-- down -->
 			<item>
-				baixo<tag>out="DOWN"</tag>
+				<one-of>
+					<item>
+						baixo<tag>out="DOWN"</tag>
+					</item>
+					<item>
+						trás<tag>out="DOWN"</tag>
+					</item>
+				</one-of>
 			</item>
+			
 		</one-of>
 	</rule>
 	
 	
+	<!-- quantity of places to move a piece-->
 	<rule id="Quantity">
 		<one-of>
 			<item>
-				um<tag>out="ONE"</tag>
+				uma<tag>out="ONE"</tag>
 			</item>
 			<item>
-				dois<tag>out="TWO"</tag>
+				duas<tag>out="TWO"</tag>
 			</item>
 			<item>
 				três<tag>out="THREE"</tag>
@@ -501,6 +603,72 @@
 			<item>
 				oito<tag>out="EIGHT"</tag>
 			</item>
+		</one-of>
+	</rule>
+
+	
+	<!-- position of the pawns -->
+	<rule id="Ordinals">
+		<one-of>
+			<item>
+				primeiro<tag>out="FIRST"</tag>
+			</item>
+			<item>
+				segundo<tag>out="SECOND"</tag>
+			</item>
+			<item>
+				terceiro<tag>out="THIRD"</tag>
+			</item>
+			<item>
+				quarto<tag>out="FORTH"</tag>
+			</item>
+			<item>
+				quinto<tag>out="FIFTH"</tag>
+			</item>
+			<item>
+				sexto<tag>out="SIXTH"</tag>
+			</item>
+			<item>
+				sétimo<tag>out="SEVENTH"</tag>
+			</item>
+			<item>
+				oitavo<tag>out="EIGHTH"</tag>
+			</item>
+		</one-of>
+	</rule>
+
+
+	<!-- Board colors -->
+	<rule id="Colors">
+		<one-of>
+			<item>
+				verde<tag>out="GREEN"</tag>
+			</item>
+			<item>
+				azul<tag>out="BLUE"</tag>
+			</item>
+			<item>
+				laranja<tag>out="ORANGE"</tag>
+			</item>
+			<item>
+				cor de laranja<tag>out="ORANGE"</tag>
+			</item>
+			<item>
+				roxo<tag>out="PURPLE"</tag>
+			</item>
+			<item>
+				violeta<tag>out="PURPLE"</tag>
+			</item>
+			<item>
+				vermelho<tag>out="RED"</tag>
+			</item>
+			<item>
+				encarnado<tag>out="RED"</tag>
+			</item>
+			<item>
+				castanho<tag>out="BROWN"</tag>
+			</item>
+
 		</one-of>
 	</rule>
 	

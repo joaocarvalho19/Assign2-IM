@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:speechModality"
         mc:Ignorable="d"
-        Title="SpeechModality" Height="135.868" Width="476.789">
+        Title="SpeechModality" Height="135.868" Width="940.789">
     <Grid>
-        <TextBox x:Name="result" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
-        <TextBox x:Name="confidence" HorizontalAlignment="Left" Height="40" Margin="10,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
-        <TextBox x:Name="semantics" HorizontalAlignment="Left" Height="40" Margin="10,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449" FontSize="20" />
+        <TextBox x:Name="result" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="900" FontSize="20" />
+        <TextBox x:Name="confidence" HorizontalAlignment="Left" Height="40" Margin="10,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="900" FontSize="20" />
+        <TextBox x:Name="semantics" HorizontalAlignment="Left" Height="40" Margin="10,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="900" FontSize="20" />
 
     </Grid>
 </Window>
