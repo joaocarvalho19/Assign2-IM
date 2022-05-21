@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 	
-	
 	<rule id="rootRule" scope="public">
 		<one-of>
 			 
@@ -95,9 +94,15 @@
 
 	<!-- Change board color -->
 	<rule id="ChangeBoardColor" scope="public">
+
+		<example> muda cor do tabuleiro para vermelho </example>
 		
 		<item repeat="0-1"> por favor </item>
-		<item>muda cor</item>
+		<one-of>
+			<item>altera </item>
+			<item>muda </item>
+		</one-of>
+		<item> cor</item>
 		<item repeat="0-1"> do </item>
 		<item>tabuleiro</item>
 		<item repeat="0-1"> para </item>
@@ -110,9 +115,17 @@
 
 	<!-- Change aspect of the pieces -->
 	<rule id="ChangeAppearancePieces" scope="public">
+
+		<example> muda aspeto das peças por favor </example>
 		
 		<item repeat="0-1"> por favor </item>
-		<item>muda aspeto</item>
+
+		<one-of>
+			<item>altera </item>
+			<item>muda </item>
+		</one-of>
+		
+		<item> aspeto</item>
 		<item repeat="0-1"> das </item>
 		<item>peças <tag>out="PIECE_APPEARANCE"</tag> </item>
 		<item repeat="0-1"> por favor </item>
@@ -120,8 +133,11 @@
 
 	<!-- Deactivate sound -->
 	<rule id="DeactivateSound" scope="public">
-		<item repeat="0-1"> por favor </item>
 		
+		<example> desliga o som </example>
+		
+		<item repeat="0-1"> por favor </item>
+
 		<one-of>
 			<item>desativa</item>
 			<item>desliga</item>
@@ -130,18 +146,19 @@
 		<item repeat="0-1"> o </item>
 		
 		<one-of>
-			<item>som<tag> out="NOSOUND"</tag>
-		</item>
-			<item> volume<tag> out="NOSOUND"</tag>
-		</item>
-
+				<item>som<tag> out="NOSOUND"</tag></item>
+				<item> volume<tag> out="NOSOUND"</tag></item>
 		</one-of>
+		
 		<item repeat="0-1"> por favor </item>
 	</rule>
 	
 	
 	<!-- Activate sound -->	
 	<rule id="ActivateSound" scope="public">
+
+		<example> liga o som </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<one-of>
 			<item>ativa</item>
@@ -164,6 +181,10 @@
 
 	<!-- Move a piece -->
 	<rule id="MovePiece" scope="public">
+
+		<example> move primeiro peão duas casas para a frente </example>
+		<example> move rainha três casas para a direita </example>
+		<example> move cavalo da direita duas posições para cima uma posição para direita </example>
 		
 		<item repeat="0-1"> por favor </item>
 		<item>move</item>
@@ -172,6 +193,8 @@
 			
 			<!-- pawn movements-->
 			<item>
+
+				<item repeat="0-1"> o </item>
 				
 				<ruleref uri="#Ordinals"/>
 				<tag> out = rules.latest(); </tag>
@@ -192,8 +215,6 @@
 
 				<ruleref uri="#directionsud"/>
 				<tag> out = out + " " + rules.latest(); </tag>
-			
-
 				
 			</item>
 
@@ -307,6 +328,7 @@
 
 			<item repeat="0-1"> por favor </item>
 		</one-of>
+		
 	</rule>
 
 	<rule id="directionsrl">
@@ -332,6 +354,9 @@
 
 	<!-- start new game-->
 	<rule id="NewGame" scope="public">
+
+		<example> começa novo jogo </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>
 			começa novo jogo<tag>out="NEWGAME"</tag>
@@ -342,11 +367,14 @@
 	
 	<!-- start game-->
 	<rule id="StartGame" scope="public">
+
+		<example> começa jogo </example>
+		
 		<item repeat="0-1"> por favor </item>
-		<item>comeca</item>
-		<item repeat="0-1"> um </item>
+		<item>começa</item>
+		<item repeat="0-1"> o </item>
 		<item>
-			novo jogo <tag>out="STARTGAME"</tag>
+			jogo <tag>out="STARTGAME"</tag>
 		</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
@@ -354,6 +382,9 @@
 	
 	<!-- give up game-->
 	<rule id="GiveUp" scope="public">
+
+		<example> desiste do jogo </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>
 			desiste <tag>out="GIVEUP"</tag>
@@ -366,28 +397,37 @@
 	
 	<!-- cancel options -->	
 	<rule id="Cancel" scope="public">
+
+		<example> cancela alterações </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>
 			cancela <tag>out="CANCEL"</tag>
 		</item>
-		<item repeat="0-1">alteraçoes</item>
+		<item repeat="0-1">alterações</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
 	
-	<!-- save game-->
+	<!-- save options-->
 	<rule id="Save" scope="public">
+
+		<example> guarda alterações </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>
 			guarda <tag>out="SAVE"</tag>
 		</item>
 		
-		<item repeat="0-1">alteraçoes</item>
+		<item repeat="0-1">alterações</item>
 		<item repeat="0-1"> por favor </item>
 	</rule>
 
 	<!-- undo last move-->
 	<rule id="Undo" scope="public">
+
+		<example> desfaz último movimento </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>desfaz</item>
 		<item repeat="0-1"> último </item>
@@ -400,6 +440,9 @@
 	
 	<!-- redo last move -->
 	<rule id="Redo" scope="public">
+
+		<example> refaz último movimento </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item>refaz</item>
 		<item repeat="0-1"> último </item>
@@ -412,6 +455,9 @@
 	
 	<!-- give hint -->
 	<rule id="Hint" scope="public">
+
+		<example> dá me uma dica </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item> dá </item>
 		<item repeat="0-1"> me </item>
@@ -423,6 +469,9 @@
 	
 	<!-- open options -->
 	<rule id="Options" scope="public">
+		
+		<example> abre as definições </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<item> abre </item>
 		<item repeat="0-1"> as </item>
@@ -441,6 +490,9 @@
 	
 	<!-- scroll down-->
 	<rule id="ScrollDown" scope="public">
+
+		<example> anda para baixo </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<one-of>
 			<item>
@@ -476,6 +528,9 @@
 	
 	<!-- scroll up-->
 	<rule id="ScrollUp" scope="public">
+
+		<example> anda para cima </example>
+		
 		<item repeat="0-1"> por favor </item>
 		<one-of>
 			<item>
@@ -509,6 +564,7 @@
 	
 	<!-- objects with exception of the knight and pawn -->
 	<rule id="Object">
+		
 		<one-of>
 			
 			<item>
