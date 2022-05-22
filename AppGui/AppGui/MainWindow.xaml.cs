@@ -34,37 +34,40 @@ namespace AppGui
         IWebDriver driver;
 
         // Keep the coordinates of pieces
-        Dictionary<string, string> coordinates =
-                       new Dictionary<string, string>();
+        Dictionary<string, (string, int)> coordinates =
+                       new Dictionary<string, (string, int)>();
+
+        // Last move
+        string[] last_move = { "", "", "" };
 
         public void get_coordinates()
         {
-            coordinates.Add("white_rook_1", "square-11");
-            coordinates.Add("white_rook_2", "square-81");
-            coordinates.Add("white_knight_1", "square-21");
-            coordinates.Add("white_knight_2", "square-71");
-            coordinates.Add("white_bishop_1", "square-31");
-            coordinates.Add("white_bishop_2", "square-61");
-            coordinates.Add("white_queen", "square-41");
-            coordinates.Add("white_king", "square-51");
+            coordinates.Add("white_rook_1", ("square-11", 0));
+            coordinates.Add("white_rook_2", ("square-81", 0));
+            coordinates.Add("white_knight_1", ("square-21", 0));
+            coordinates.Add("white_knight_2", ("square-71", 0));
+            coordinates.Add("white_bishop_1", ("square-31", 0));
+            coordinates.Add("white_bishop_2", ("square-61", 0));
+            coordinates.Add("white_queen", ("square-41", 0));
+            coordinates.Add("white_king", ("square-51", 0));
 
-            for(int i = 1; i<=8; i++)
+            for (int i = 1; i<=8; i++)
             {
-                coordinates.Add("white_pawn_"+i, "square-"+i+"2");
+                coordinates.Add("white_pawn_"+i, ("square-"+i+"2", 0));
             }
-            coordinates.Add("black_rook_1", "square-18");
-            coordinates.Add("black_rook_2", "square-88");
-            coordinates.Add("black_knight_1", "square-28");
-            coordinates.Add("black_knight_2", "square-78");
-            coordinates.Add("black_bishop_1", "square-38");
-            coordinates.Add("black_bishop_2", "square-68");
-            coordinates.Add("black_queen", "square-48");
-            coordinates.Add("black_king", "square-58");
+            coordinates.Add("black_rook_1", ("square-18", 0));
+            coordinates.Add("black_rook_2", ("square-88", 0));
+            coordinates.Add("black_knight_1", ("square-28", 0));
+            coordinates.Add("black_knight_2", ("square-78", 0));
+            coordinates.Add("black_bishop_1", ("square-38", 0));
+            coordinates.Add("black_bishop_2", ("square-68", 0));
+            coordinates.Add("black_queen", ("square-48", 0));
+            coordinates.Add("black_king", ("square-58", 0));
 
             for (int i = 1; i <= 8; i++)
             {
-                coordinates.Add("black_pawn_" + i, "square-" + i + "7");
-            }
+                coordinates.Add("black_pawn_" + i, ("square-" + i + "7", 0));
+        }
         }
          // Move a Piece
         public void move(string piece, string _to)
@@ -72,7 +75,44 @@ namespace AppGui
             try
             {
                 Actions action = new Actions(driver);
-                string class_coord = coordinates[piece];
+
+                Console.WriteLine("COORDINATES BEFORE: " + piece + " - " + coordinates[piece]);
+                string class_coord = coordinates[piece].Item1;
+                IWebElement piece_from = driver.FindElement(By.ClassName(class_coord));
+                
+                piece_from.Click();
+
+                System.Threading.Thread.Sleep(1000);
+
+                IWebElement piece_to = driver.FindElement(By.ClassName(_to));
+                action.ClickAndHold(piece_from).MoveToElement(piece_to).Release().Build().Perform();
+
+                // update coordenates
+                int current_num_moves = coordinates[piece].Item2;
+                coordinates[piece] = (_to, current_num_moves+1);
+
+                //Last move
+                last_move[0] = piece;    //piece
+                last_move[1] = class_coord;    //old position
+                last_move[2] = _to;    //new position
+                Console.WriteLine("COORDINATES AFTER: "+piece+" - "+coordinates[piece]);
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR moving a piece {0}", e);
+            }
+
+        }
+
+        public int get_num_moves(string piece)
+            {return coordinates[piece].Item2; }
+
+        public void get_target_class(string piece, string _to)
+        {
+            try
+            {
+                Actions action = new Actions(driver);
+                string class_coord = coordinates[piece].Item1;
                 IWebElement piece_from = driver.FindElement(By.ClassName(class_coord));
                 piece_from.Click();
 
@@ -113,6 +153,7 @@ namespace AppGui
                 IWebElement new_gameButtom = controlsButtoms[1];
                 new_gameButtom.Click();
 
+                get_coordinates();
             }
             catch (WebDriverException e)
             {
@@ -124,11 +165,21 @@ namespace AppGui
         public void undo_move()
         {
             try
-            {
+            {   
                 IList<IWebElement> controlsButtoms = driver.FindElements(By.ClassName("primary-controls-button"));
                 IWebElement undoButtom = controlsButtoms[1];
                 undoButtom.Click();
 
+                //Last move
+                string piece = last_move[0];    //piece
+                string old_pos = last_move[1];    //old position
+                string new_pos = last_move[2];    //new position
+                
+                // update coordenates
+                int current_num_moves = coordinates[piece].Item2;
+                coordinates[piece] = (old_pos, current_num_moves - 1);
+
+                Console.WriteLine(coordinates[piece]);
             }
             catch (WebDriverException e)
             {
@@ -145,6 +196,16 @@ namespace AppGui
                 IWebElement undoButtom = controlsButtoms[2];
                 undoButtom.Click();
 
+                //Last move
+                string piece = last_move[0];    //piece
+                string old_pos = last_move[1];    //old position
+                string new_pos = last_move[2];    //new position
+
+                // update coordenates
+                int current_num_moves = coordinates[piece].Item2;
+                coordinates[piece] = (new_pos, current_num_moves + 1);
+
+                Console.WriteLine(coordinates[piece]);
             }
             catch (WebDriverException e)
             {
@@ -287,7 +348,7 @@ namespace AppGui
 
                 
             }
-            catch (WebDriverException e)
+            catch (Exception e)
             {
                 Console.WriteLine("ERROR {0}", e);
             }
@@ -296,7 +357,6 @@ namespace AppGui
 
         public void scroll_options()
         {
-            // "circle-gearwheel" -- settings
 
             try
             {
@@ -313,19 +373,39 @@ namespace AppGui
 
         }
 
+        public void testpawn(string piece, int quantity, string ordinal) {
+
+            if (piece != null && quantity != 0 && ordinal != null)// ex: FIRST PAWN TWO   - PEAO
+            {
+                string final_piece = piece + ordinal;
+                string piece_square = coordinates[final_piece].Item1;
+                int row = piece_square[piece_square.Length - 1] - '0';
+                int final_row = row + quantity;
+
+                string target_sqare = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+                Console.WriteLine("FINAL PIECE: " + target_sqare);
+                move(final_piece, target_sqare);
+            }
+        }
+
 
         // Start de browser
         [SetUp]
         public void start_Browser()
         {
-            // Local Selenium WebDriver
-            driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();
-            driver.Navigate().GoToUrl(chess_url);
+            try {
+                // Local Selenium WebDriver
+                driver = new ChromeDriver();
+                driver.Manage().Window.Maximize();
+                driver.Navigate().GoToUrl(chess_url);
 
-            IWebElement okButton = driver.FindElement(By.XPath("//button[.='Ok']"));
-            okButton.Click();
-
+                IWebElement okButton = driver.FindElement(By.XPath("//button[.='Ok']"));
+                okButton.Click();
+            }
+            catch (WebDriverException e)
+            {
+                Console.WriteLine("ERROR {0}", e);
+            }
         }
 
 
@@ -346,20 +426,28 @@ namespace AppGui
 
             // CHESS APP -----------------------------------------------------------
             get_coordinates();
-            foreach (KeyValuePair<string, string> kvp in coordinates)
+            foreach (KeyValuePair<string, (string, int)> kvp in coordinates)
             {
                 Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
             
             start_Browser();
-            move("white_pawn_5", "square-54");
-            /*System.Threading.Thread.Sleep(3000);
-            show_clue();
-            System.Threading.Thread.Sleep(3000);
-            open_settings();
-            System.Threading.Thread.Sleep(3000);
-            change_color();*/
+            /*move("white_pawn_5", "square-54");
+            System.Threading.Thread.Sleep(5000);
 
+            System.Threading.Thread.Sleep(5000);
+
+            //one_direction("white_rook_", 2, "1", "up");
+            two_directions("white_queen", 3, "right", "up");
+            System.Threading.Thread.Sleep(5000);
+
+            testpawn("white_pawn_", 2, "1");
+
+            System.Threading.Thread.Sleep(5000);
+
+            two_directions("white_queen", 2, "left", "down");
+
+            */
         }
 
         private void MmiC_Message(object sender, MmiEventArgs e)
@@ -370,11 +458,26 @@ namespace AppGui
 
             // Print income msg
             Console.WriteLine("INCOME MSG: "+(string)json.recognized[0].ToString());
+            
+            string piece = null;
+            string ordinal = null;
+            int quantity = 0;
+            string coord = null;
+            string direction = null;
+            string direction2 = null;
 
-            Shape _s = null;
             //switch (obj)
-            switch ((string)json.recognized[0].ToString())
+            string msg = json.recognized[0].ToString();
+            List<string> elements = new List<string>(
+                msg.Split(new string[] { " " }, StringSplitOptions.None));
+
+            // Mexer Peão
+            
+            switch (elements[0])
             {
+                case "YES_NEWGAME":
+                    start_new_game();
+                    break;
                 case "GIVEUP":
                     abort_game();
                     break;
@@ -414,24 +517,413 @@ namespace AppGui
                 case "SOUND":
                     sounds();
                     break;
+
+                case "QUEEN":
+                    piece = "white_queen";
+                    break;
+                case "KING":
+                    piece = "white_king";
+                    break;
+
+                case "FIRST":
+                    ordinal = "1";
+                    break;
+                case "SECOND":
+                    ordinal = "2";
+                    break;
+                case "THIRD":
+                    ordinal = "3";
+                    break;
+                case "FOURTH":
+                    ordinal = "4";
+                    break;
+                case "FIFTH":
+                    ordinal = "5";
+                    break;
+                case "SIXTH":
+                    ordinal = "6";
+                    break;
+                case "SEVENTH":
+                    ordinal = "7";
+                    break;
+                case "EIGHTH":
+                    ordinal = "8";
+                    break;
+
             }
 
-            /*App.Current.Dispatcher.Invoke(() =>
-            {
-                switch ((string)json.recognized[1].ToString())
+            try
                 {
-                    case "GREEN":
-                        _s.Fill = Brushes.Green;
+                switch (elements[1])
+                    {
+                    case "PAWN":
+                        piece = "white_pawn_";
                         break;
-                    case "BLUE":
-                        abort_game();
-                        _s.Fill = Brushes.Blue;
+                    case "ROOK":
+                        piece = "white_rook_";
                         break;
-                    case "RED":
-                        _s.Fill = Brushes.Red;
+                    case "BISHOP":
+                        piece = "white_bishop_";
+                        break;
+                    case "KNIGHT":
+                        piece = "white_knight_";
+                        break;
+
+                    case "ONE":
+                        quantity = 1;
+                        break;
+                    case "TWO":
+                        quantity = 2;
+                        break;
+                    case "THREE":
+                        quantity = 3;
+                        break;
+                    case "FOUR":
+                        quantity = 4;
+                        break;
+                    case "FIVE":
+                        quantity = 5;
+                        break;
+                    case "SIX":
+                        quantity = 6;
+                        break;
+                    case "SEVEN":
+                        quantity = 7;
+                        break;
+                    case "EIGTH":
+                        quantity = 8;
                         break;
                 }
-            });*/
+            }
+            catch (Exception ex)
+                {
+                    Console.WriteLine("ERROR {0}", ex);
+                }
+            try
+            {
+                switch (elements[2])
+                {
+                    case "A1":coord = "square-11";
+                        break;
+                    case "A2":
+                        coord = "square-12";
+                        break;
+                    case "A3":
+                        coord = "square-13";
+                        break;
+                    case "A4":
+                        coord = "square-14";
+                        break;
+                    case "A5":
+                        coord = "square-15";
+                        break;
+                    case "A6":
+                        coord = "square-16";
+                        break;
+                    case "A7":
+                        coord = "square-17";
+                        break;
+                    case "A8":
+                        coord = "square-18";
+                        break;
+
+                    case "B1":
+                        coord = "square-21";
+                        break;
+                    case "B2":
+                        coord = "square-22";
+                        break;
+                    case "B3":
+                        coord = "square-23";
+                        break;
+                    case "B4":
+                        coord = "square-24";
+                        break;
+                    case "B5":
+                        coord = "square-25";
+                        break;
+                    case "B6":
+                        coord = "square-26";
+                        break;
+                    case "B7":
+                        coord = "square-27";
+                        break;
+                    case "B8":
+                        coord = "square-28";
+                        break;
+
+                    case "C1":
+                        coord = "square-31";
+                        break;
+                    case "C2":
+                        coord = "square-32";
+                        break;
+                    case "C3":
+                        coord = "square-33";
+                        break;
+                    case "C4":
+                        coord = "square-34";
+                        break;
+                    case "C5":
+                        coord = "square-35";
+                        break;
+                    case "C6":
+                        coord = "square-36";
+                        break;
+                    case "C7":
+                        coord = "square-37";
+                        break;
+                    case "C8":
+                        coord = "square-38";
+                        break;
+
+                    case "D1":
+                        coord = "square-41";
+                        break;
+                    case "D2":
+                        coord = "square-42";
+                        break;
+                    case "D3":
+                        coord = "square-43";
+                        break;
+                    case "D4":
+                        coord = "square-44";
+                        break;
+                    case "D5":
+                        coord = "square-45";
+                        break;
+                    case "D6":
+                        coord = "square-46";
+                        break;
+                    case "D7":
+                        coord = "square-47";
+                        break;
+                    case "D8":
+                        coord = "square-48";
+                        break;
+
+                    case "E1":
+                        coord = "square-51";
+                        break;
+                    case "E2":
+                        coord = "square-52";
+                        break;
+                    case "E3":
+                        coord = "square-53";
+                        break;
+                    case "E4":
+                        coord = "square-54";
+                        break;
+                    case "E5":
+                        coord = "square-55";
+                        break;
+                    case "E6":
+                        coord = "square-56";
+                        break;
+                    case "E7":
+                        coord = "square-57";
+                        break;
+                    case "E8":
+                        coord = "square-58";
+                        break;
+
+                    case "F1":
+                        coord = "square-61";
+                        break;
+                    case "F2":
+                        coord = "square-62";
+                        break;
+                    case "F3":
+                        coord = "square-63";
+                        break;
+                    case "F4":
+                        coord = "square-64";
+                        break;
+                    case "F5":
+                        coord = "square-65";
+                        break;
+                    case "F6":
+                        coord = "square-66";
+                        break;
+                    case "F7":
+                        coord = "square-67";
+                        break;
+                    case "F8":
+                        coord = "square-68";
+                        break;
+
+                    case "G1":
+                        coord = "square-71";
+                        break;
+                    case "G2":
+                        coord = "square-72";
+                        break;
+                    case "G3":
+                        coord = "square-73";
+                        break;
+                    case "G4":
+                        coord = "square-74";
+                        break;
+                    case "G5":
+                        coord = "square-75";
+                        break;
+                    case "G6":
+                        coord = "square-76";
+                        break;
+                    case "G7":
+                        coord = "square-77";
+                        break;
+                    case "G8":
+                        coord = "square-78";
+                        break;
+
+                    case "H1":
+                        coord = "square-81";
+                        break;
+                    case "H2":
+                        coord = "square-82";
+                        break;
+                    case "H3":
+                        coord = "square-83";
+                        break;
+                    case "H4":
+                        coord = "square-84";
+                        break;
+                    case "H5":
+                        coord = "square-85";
+                        break;
+                    case "H6":
+                        coord = "square-86";
+                        break;
+                    case "H7":
+                        coord = "square-87";
+                        break;
+                    case "H8":
+                        coord = "square-88";
+                        break;
+
+                    case "ONE":
+                        quantity = 1;
+                        break;
+                    case "TWO":
+                        quantity = 2;
+                        break;
+                    case "THREE":
+                        quantity = 3;
+                        break;
+                    case "FOUR":
+                        quantity = 4;
+                        break;
+                    case "FIVE":
+                        quantity = 5;
+                        break;
+                    case "SIX":
+                        quantity = 6;
+                        break;
+                    case "SEVEN":
+                        quantity = 7;
+                        break;
+                    case "EIGTH":
+                        quantity = 8;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR {0}", ex);
+            }
+            try
+            {
+                switch (elements[3])
+                {
+                    case "UP":
+                        direction = "up";
+                        break;
+                    case "DOWN":
+                        direction = "down";
+                        break;
+                    case "LEFT":
+                        direction = "left";
+                        break;
+                    case "RIGHT":
+                        direction = "right";
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR {0}", ex);
+            }
+            try
+            {
+                switch (elements[4])
+                {
+                    case "UP":
+                        direction2 = "up";
+                        break;
+                    case "DOWN":
+                        direction2 = "down";
+                        break;
+                    case "LEFT":
+                        direction2 = "left";
+                        break;
+                    case "RIGHT":
+                        direction2 = "right";
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR {0}", ex);
+            }
+
+            /* - - - - - -  - Process - - - - - - - -*/
+
+            // IF is a move with coordinates - Ex: d4
+            if (piece != null && coord != null)
+            {
+                string final_piece = piece + ordinal;
+                Console.WriteLine("FINAL PIECE: " + final_piece);
+                move(final_piece, coord);
+            }
+            else {  // IF NOT
+                // 0 diretions implies PAWN
+                if (piece != null && quantity != 0 && ordinal != null && direction == null)// ex: FIRST PAWN TWO   - PEAO
+                {
+                    string final_piece = piece + ordinal;
+                    string piece_square = coordinates[final_piece].Item1;
+                    int row = piece_square[piece_square.Length - 1] - '0';
+                    int final_row = row + quantity;
+
+                    string target_sqare = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+                    Console.WriteLine("FINAL PIECE: " + target_sqare);
+                    move(final_piece, target_sqare);
+                }
+
+
+                // Only 1 direction - (up, down...)
+                else if (piece != null && quantity != 0 && direction != null && direction2 == null) {
+                    string final_piece = null;
+                    if (ordinal == null) { final_piece = piece; }
+                    else { final_piece = piece + ordinal;}
+
+                    one_direction(final_piece, quantity, direction);
+                }
+
+                // 2 direction - (up left, down right ...)
+                else if (piece != null && quantity != 0 && direction != null && direction2 != null)
+                {
+                    string final_piece = null;
+                    if (ordinal == null) { final_piece = piece; }
+                    else { final_piece = piece + ordinal; }
+
+                    two_directions(final_piece, quantity, direction, direction2);
+                }
+
+            }
+
 
             mmic.Send(lce.NewContextRequest());
 
@@ -451,6 +943,108 @@ namespace AppGui
             mmic.Send(exNot);
 
 
+        }
+
+        public void one_direction(string final_piece, int quantity, string direction)
+        {
+            // EX: FIRST ROOK TWO UP RIGHT
+
+                string piece_square = coordinates[final_piece].Item1;
+                int row, col, final_row, final_col;
+                string target_square = null;
+
+                if (direction == "up")
+                {
+                    row = piece_square[piece_square.Length - 1] - '0';
+                    final_row = row + quantity;
+                    target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+                }
+                else if (direction == "down")
+                {
+                    row = piece_square[piece_square.Length - 1] - '0';
+                    final_row = row - quantity;
+                    target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+                }
+                else if (direction == "left")
+                {
+                    col = piece_square[piece_square.Length - 2] - '0';
+                    final_col = col - quantity;
+                    char last_char = piece_square[piece_square.Length - 1];
+                    target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
+                }
+                else if (direction == "right")
+                {
+                    col = piece_square[piece_square.Length - 2] - '0';
+                    final_col = col + quantity;
+                    char last_char = piece_square[piece_square.Length - 1];
+                    target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
+                }
+
+
+                Console.WriteLine("FINAL PIECE: " + target_square);
+                move(final_piece, target_square);
+            
+        }
+
+        public void two_directions(string final_piece, int quantity, string direction, string direction_2)
+        {
+            // EX: FIRST BISHOP TWO UP RIGHT
+            string piece_square = coordinates[final_piece].Item1;
+            int row, col, final_row, final_col;
+            string target_square = null;
+
+            if ((direction == "up" && direction_2 == "left") || (direction == "left" && direction_2 == "up"))
+            {
+                col = piece_square[piece_square.Length - 2] - '0';
+                row = piece_square[piece_square.Length - 1] - '0';
+
+                final_col = col - quantity;
+
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row + quantity;
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + final_row;
+            }
+
+            else if ((direction == "up" && direction_2 == "right") || (direction == "right" && direction_2 == "up"))
+            {
+                col = piece_square[piece_square.Length - 2] - '0';
+                row = piece_square[piece_square.Length - 1] - '0';
+
+                final_col = col + quantity;
+
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row + quantity;
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + final_row;
+            }
+
+            else if ((direction == "down" && direction_2 == "right") || (direction == "right" && direction_2 == "down"))
+            {
+                col = piece_square[piece_square.Length - 2] - '0';
+                row = piece_square[piece_square.Length - 1] - '0';
+
+                final_col = col + quantity;
+
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row - quantity;
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + final_row;
+            }
+
+            else if ((direction == "down" && direction_2 == "left") || (direction == "left" && direction_2 == "down"))
+            {
+                col = piece_square[piece_square.Length - 2] - '0';
+                row = piece_square[piece_square.Length - 1] - '0';
+
+                final_col = col - quantity;
+
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row - quantity;
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + final_row;
+            }
+
+
+            Console.WriteLine("FINAL PIECE: " + target_square);
+                move(final_piece, target_square);
+            
         }
     }
 }

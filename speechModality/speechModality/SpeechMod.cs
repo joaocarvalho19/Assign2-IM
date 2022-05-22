@@ -16,6 +16,8 @@ namespace speechModality
         private static SpeechRecognitionEngine sre= new SpeechRecognitionEngine(new System.Globalization.CultureInfo("pt-PT"));
         private Grammar gr;
 
+        // Flag to check new game reponse
+        Boolean new_game_flag = false;
 
         public event EventHandler<SpeechEventArg> Recognized;
         protected virtual void onRecognized(SpeechEventArg msg)
@@ -79,14 +81,35 @@ namespace speechModality
             Console.WriteLine(e.Result.Semantics);
             //SEND
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
+            
             string json = "{ \"recognized\": [";
             foreach (var resultSemantic in e.Result.Semantics)
             {
-                json += "\"" + resultSemantic.Value.Value + "\", ";
+                string final_value = null;
+                // Check if is an answer to a new game ask after an abort
+                if (new_game_flag)
+                {
+                    if (resultSemantic.Value.Value + "_" == "YES_")
+                    {
+                        final_value = "YES_NEWGAME";
+                        Console.WriteLine(final_value);
+                        json += "\"" + final_value + "\", ";
+                    }
+                    else
+                    {
+                        Console.WriteLine(resultSemantic);
+                        json += "\"" + resultSemantic.Value.Value + "\", ";
+                    }
+                }
+                else { 
+                    Console.WriteLine(resultSemantic);
+                    json += "\"" + resultSemantic.Value.Value + "\", ";
+                }
             }
             json = json.Substring(0, json.Length - 2);
             json += "] }";
 
+            //json = "{ \"recognized\": [\"FIRST PAWN TWO\"] }";
             Console.WriteLine(json);
 
             var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime + "", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration) + "", e.Result.Confidence, json);
@@ -114,7 +137,7 @@ namespace speechModality
             Console.WriteLine(com);
 
 
-            tts.Speak(com);
+            //tts.Speak(com);
 
             //dynamic json = JsonConvert.DeserializeObject(com);
 
@@ -123,10 +146,14 @@ namespace speechModality
             {
                 case "GIVEUP":
                     tts.Speak("O jogo foi abortado. Deseja começar um novo?");
+                    new_game_flag = true;
                     break;
 
                 case "NEWGAME":
                     tts.Speak("Pode começar. Boa sorte!");
+                    break;
+                case "CLUE":
+                    tts.Speak("Deseja fazer esta jogada ?");
                     break;
 
             }
