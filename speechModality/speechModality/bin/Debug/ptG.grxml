@@ -94,6 +94,11 @@
 				<ruleref uri ="#Knight"/>
 				<tag> out.Knight = rules.Knight</tag>
 			</item>
+
+			<item>
+				<ruleref uri ="#Response_NG"/>
+				<tag> out.Response_NG = rules.Response_NG</tag>
+			</item>
 			
 		</one-of>	  
 	</rule>
@@ -223,13 +228,35 @@
 				<item repeat="0-1"> para </item>
 				<item repeat="0-1"> a </item>
 
-				<ruleref uri="#directionsud"/>
-				<tag> out = out + " " + rules.latest(); </tag>
+				<one-of>
+					<item repeat="0-1">
+						<item repeat="0-1">
+							<ruleref uri="#directionsud"/>
+							<tag> out = out + " " + rules.latest(); </tag>
+						</item>
 
+						<item repeat="0-1">
+
+							<ruleref uri="#directionsrl"/>
+							<tag> out = out + " " + rules.latest(); </tag>
+						</item>
+					</item>
+					<item repeat="0-1">
+						<item repeat="0-1">
+							<ruleref uri="#directionsrl"/>
+							<tag> out = out + " " + rules.latest(); </tag>
+						</item>
+
+						<item repeat="0-1">
+							<ruleref uri="#directionsud"/>
+							<tag> out = out + " " + rules.latest(); </tag>
+						</item>
+					</item>
+				</one-of>
 			</item>
 
 			<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-			
+			<!-- non-singular Pieces  -->
 			<item>
 				<ruleref uri="#Ordinals"/>
 				<tag> out = rules.latest(); </tag>
@@ -246,6 +273,21 @@
 
 			
 			</item>
+			<!-- singular Pieces  -->
+			<item>
+
+				<ruleref uri="#Object"/>
+				<tag> out = out + " " + rules.latest(); </tag>
+
+				<item repeat="0-1"> para </item>
+
+				<item>
+					<ruleref uri="#coordinates"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+				</item>
+
+			</item>
+			
 			<item>
 				<ruleref uri="#Ordinals"/>
 				<tag> out = rules.latest(); </tag>
@@ -283,51 +325,104 @@
 			<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 			<!-- general movements-->
 			<item>
-
-				<ruleref uri="#Object"/>
-				<tag> out = rules.latest(); </tag>
-
-				<item repeat="0-1">da</item>
-
-
-				<!-- LOC- indicates whether the piece is located on the left or right -->
-				<item repeat ="0-1">
-					<ruleref uri="#directionsrl"/>
-					<tag> out = out + " LOC-" + rules.latest(); </tag>
-				</item>
-
-				<ruleref uri="#Quantity"/>
-				<tag> out = out + " " + rules.latest(); </tag>
-
-				<one-of>
-					<item repeat="0-1">posições</item>
-					<item repeat="0-1">casas</item>
-				</one-of>
-
-				<item repeat="0-1"> para </item>
-				<item repeat="0-1"> a </item>
+			<one-of>
+				<!-- without ordinal (queen...)-->
+				<item>
+				
+					<ruleref uri="#Object"/>
+					<tag> out = rules.latest(); </tag>
 
 
-				<item repeat="0-1">
-					<ruleref uri="#directionsud"/>
-					<tag> out = out + " " + rules.latest(); </tag>
-				</item>
-
-				<item repeat="0-1">
-
-					<ruleref uri="#directionsdiag"/>
+					<ruleref uri="#Quantity"/>
 					<tag> out = out + " " + rules.latest(); </tag>
 
-					<ruleref uri="#directionsrl"/>
-					<tag> out = out + " " + rules.latest(); </tag>
-				</item>
+					<one-of>
+						<item repeat="0-1">posições</item>
+						<item repeat="0-1">casas</item>
+					</one-of>
 
-				<item repeat="0-1">
-					<ruleref uri="#directionsrl"/>
-					<tag> out = out + " " + rules.latest(); </tag>
+					<item repeat="0-1"> para </item>
+					<item repeat="0-1"> a </item>
+
+					<one-of>
+						<item>
+							<item repeat="0-1">
+								<ruleref uri="#directionsud"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+
+							<item repeat="0-1">
+
+								<ruleref uri="#directionsrl"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+						</item>
+						<item>
+							<item repeat="0-1">
+								<ruleref uri="#directionsrl"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+						
+							<item repeat="0-1">
+								<ruleref uri="#directionsud"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+						</item>
+					</one-of>
+					
 				</item>
+				<!-- with ordinal (bishops...)-->
+				<item>
+
+					<item>
+						<ruleref uri="#Ordinals"/>
+						<tag> out = rules.latest(); </tag>
+					</item>
+
+					<ruleref uri="#Object"/>
+					<tag> out = out + " " +  rules.latest(); </tag>
+
+
+					<ruleref uri="#Quantity"/>
+					<tag> out = out + " " + rules.latest(); </tag>
+
+					<one-of>
+						<item repeat="0-1">posições</item>
+						<item repeat="0-1">casas</item>
+					</one-of>
+
+					<item repeat="0-1"> para </item>
+					<item repeat="0-1"> a </item>
+
+					<one-of>
+						<item>
+							<item repeat="0-1">
+								<ruleref uri="#directionsud"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+
+							<item repeat="0-1">
+
+								<ruleref uri="#directionsrl"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+						</item>
+						<item>
+							<item repeat="0-1">
+								<ruleref uri="#directionsrl"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+
+							<item repeat="0-1">
+								<ruleref uri="#directionsud"/>
+								<tag> out = out + " " + rules.latest(); </tag>
+							</item>
+						</item>
+					</one-of>
+
+				</item>
+			</one-of>
 			</item>
-
 			<!-- knight movements-->
 			<item>
 
@@ -647,6 +742,10 @@
 		<one-of>
 
 			<item>
+				cavalo<tag>out="KNIGHT"</tag>
+			</item>
+			
+			<item>
 				rainha<tag>out="QUEEN"</tag>
 			</item>
 			<item>
@@ -889,7 +988,7 @@
 				terceiro<tag>out="THIRD"</tag>
 			</item>
 			<item>
-				quarto<tag>out="FORTH"</tag>
+				quarto<tag>out="FOURTH"</tag>
 			</item>
 			<item>
 				quinto<tag>out="FIFTH"</tag>
@@ -932,6 +1031,22 @@
 			</item>
 			<item>
 				oito<tag>out="EIGHT"</tag>
+			</item>
+		</one-of>
+	</rule>
+
+	<!-- Response to a new game ask-->
+	<rule id="Response_NG">
+		<one-of>
+			<item>
+				<item>
+					sim<tag>out="YES"</tag>
+				</item>
+				<item repeat="0-1"> quero </item>
+			</item>
+			<item>
+				<item> nao </item>
+				<item repeat="0-1"> quero </item>
 			</item>
 		</one-of>
 	</rule>

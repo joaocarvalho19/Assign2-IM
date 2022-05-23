@@ -19,6 +19,9 @@ namespace speechModality
         // Flag to check new game reponse
         Boolean new_game_flag = false;
 
+        // Flag to check hint reponse
+        Boolean hint_flag = false;
+
         public event EventHandler<SpeechEventArg> Recognized;
         protected virtual void onRecognized(SpeechEventArg msg)
         {
@@ -57,11 +60,12 @@ namespace speechModality
             sre.SpeechHypothesized += Sre_SpeechHypothesized;
 
             // NEW - TTS support 16 April
-            tts.Speak("Olá. Estou pronto para receber ordens.");
+            tts.Speak("Olá. Estou pronta para receber ordens. Boa Sorte !");
+
 
 
             //  o TTS  no final indica que se recebe mensagens enviadas para TTS
-        mmiReceiver = new MmiCommunication("localhost",8000, "User1", "TTS");
+            mmiReceiver = new MmiCommunication("localhost",8000, "User1", "TTS");
         mmiReceiver.Message += MmiReceived_Message;
         mmiReceiver.Start();
 
@@ -71,6 +75,7 @@ namespace speechModality
 
     private void Sre_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
         {
+            //tts.Speak("O seu pedido não é válido. Tente outra vez.");
             onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Semantics = e.Result.Semantics.ToString(), Final = false });
         }
 
@@ -78,22 +83,43 @@ namespace speechModality
         private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Final = true });
-            Console.WriteLine(e.Result.Semantics);
-            //SEND
-            // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
-            
-            string json = "{ \"recognized\": [";
-            foreach (var resultSemantic in e.Result.Semantics)
+            Console.WriteLine(e.Result.Confidence);
+
+            if (e.Result.Confidence > 0.4)
             {
-                string final_value = null;
-                // Check if is an answer to a new game ask after an abort
-                if (new_game_flag)
+                //SEND
+                // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
+                string json = "{ \"recognized\": [";
+                foreach (var resultSemantic in e.Result.Semantics)
                 {
-                    if (resultSemantic.Value.Value + "_" == "YES_")
+                    string final_value = null;
+                    // Check if is an answer to a new game ask after an abort
+                    if (new_game_flag)
                     {
-                        final_value = "YES_NEWGAME";
-                        Console.WriteLine(final_value);
-                        json += "\"" + final_value + "\", ";
+                        if (resultSemantic.Value.Value + "_" == "YES_")
+                        {
+                            final_value = "YES_NEWGAME";
+                            Console.WriteLine(final_value);
+                            json += "\"" + final_value + "\", ";
+                        }
+                        else
+                        {
+                            Console.WriteLine(resultSemantic);
+                            json += "\"" + resultSemantic.Value.Value + "\", ";
+                        }
+                    }
+                    else if (hint_flag) {
+                        if (resultSemantic.Value.Value + "_" == "YES_")
+                        {
+                            final_value = "YES_CLUE";
+                            Console.WriteLine(final_value);
+                            json += "\"" + final_value + "\", ";
+                        }
+                        else
+                        {
+                            Console.WriteLine(resultSemantic);
+                            json += "\"" + resultSemantic.Value.Value + "\", ";
+                        }
                     }
                     else
                     {
@@ -101,19 +127,21 @@ namespace speechModality
                         json += "\"" + resultSemantic.Value.Value + "\", ";
                     }
                 }
-                else { 
-                    Console.WriteLine(resultSemantic);
-                    json += "\"" + resultSemantic.Value.Value + "\", ";
-                }
+
+                new_game_flag = false;
+                hint_flag = false;
+                json = json.Substring(0, json.Length - 2);
+                json += "] }";
+
+                //json = "{ \"recognized\": [\"FIRST PAWN TWO\"] }";
+                Console.WriteLine(json);
+
+                var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime + "", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration) + "", e.Result.Confidence, json);
+                mmic.Send(exNot);
             }
-            json = json.Substring(0, json.Length - 2);
-            json += "] }";
-
-            //json = "{ \"recognized\": [\"FIRST PAWN TWO\"] }";
-            Console.WriteLine(json);
-
-            var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime + "", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration) + "", e.Result.Confidence, json);
-            mmic.Send(exNot);
+            else {
+                tts.Speak("O seu pedido não foi muito claro. Importa-se de repetir ?");
+            }
         }
 
 
@@ -153,29 +181,12 @@ namespace speechModality
                     tts.Speak("Pode começar. Boa sorte!");
                     break;
                 case "CLUE":
-                    tts.Speak("Deseja fazer esta jogada ?");
+                    tts.Speak("Esta seria uma boa jogada. Deseja fazê-la ?");
+                    hint_flag = true;
                     break;
-
             }
 
-            /*App.Current.Dispatcher.Invoke(() =>
-            {
-                switch ((string)json.recognized[1].ToString())
-                {
-                    case "GREEN":
-                        _s.Fill = Brushes.Green;
-                        break;
-                    case "BLUE":
-                        _s.Fill = Brushes.Blue;
-                        break;
-                    case "RED":
-                        _s.Fill = Brushes.Red;
-                        break;
-                }
-            });
-            */
-
-
+            
         }
     }
 }

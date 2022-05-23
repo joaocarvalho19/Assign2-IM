@@ -138,6 +138,8 @@ namespace AppGui
 
                 IWebElement yesButton = driver.FindElement(By.XPath("//button[.='Yes']"));
                 yesButton.Click();
+
+                coordinates.Clear();
             }
             catch (WebDriverException e)
             {
@@ -387,6 +389,24 @@ namespace AppGui
                 move(final_piece, target_sqare);
             }
         }
+        
+        public void hint_move() {
+            IList<IWebElement> settingsButtons = driver.FindElements(By.ClassName("highlight"));
+
+            Actions action = new Actions(driver);
+
+            string class_coord = settingsButtons[0].GetAttribute("class").Split(' ')[1];
+            string _to = settingsButtons[3].GetAttribute("class").Split(' ')[1];
+
+            IList<IWebElement> all = driver.FindElements(By.ClassName(class_coord));
+
+            all[1].Click();
+            System.Threading.Thread.Sleep(1000);
+
+            IWebElement piece_to = driver.FindElement(By.ClassName(_to));
+            action.ClickAndHold(all[1]).MoveToElement(settingsButtons[3]).Release().Build().Perform();
+
+        }
 
 
         // Start de browser
@@ -432,7 +452,11 @@ namespace AppGui
             }
             
             start_Browser();
-            /*move("white_pawn_5", "square-54");
+            move("white_pawn_5", "square-54");
+            System.Threading.Thread.Sleep(5000);
+            /*show_clue();
+            System.Threading.Thread.Sleep(5000);
+            
             System.Threading.Thread.Sleep(5000);
 
             System.Threading.Thread.Sleep(5000);
@@ -477,6 +501,9 @@ namespace AppGui
             {
                 case "YES_NEWGAME":
                     start_new_game();
+                    break;
+                case "YES_CLUE":
+                    hint_move();
                     break;
                 case "GIVEUP":
                     abort_game();
@@ -826,16 +853,7 @@ namespace AppGui
                     case "EIGTH":
                         quantity = 8;
                         break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR {0}", ex);
-            }
-            try
-            {
-                switch (elements[3])
-                {
+
                     case "UP":
                         direction = "up";
                         break;
@@ -847,6 +865,32 @@ namespace AppGui
                         break;
                     case "RIGHT":
                         direction = "right";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR {0}", ex);
+            }
+            try
+            {
+                switch (elements[3])
+                {
+                    case "UP":
+                        if(direction == null) {direction = "up"; }
+                        else { direction2 = "up"; }
+                        break;
+                    case "DOWN":
+                        if (direction == null) { direction = "down"; }
+                        else { direction2 = "down"; }
+                        break;
+                    case "LEFT":
+                        if (direction == null) { direction = "left"; }
+                        else { direction2 = "left"; }
+                        break;
+                    case "RIGHT":
+                        if (direction == null) { direction = "rigth"; }
+                        else { direction2 = "rigth"; }
                         break;
 
                 }
@@ -947,43 +991,43 @@ namespace AppGui
 
         public void one_direction(string final_piece, int quantity, string direction)
         {
-            // EX: FIRST ROOK TWO UP RIGHT
+            // EX: FIRST ROOK TWO UP
+            Console.WriteLine("ENTROU "+ final_piece + quantity+direction);
+            string piece_square = coordinates[final_piece].Item1;
+            int row, col, final_row, final_col;
+            string target_square = null;
 
-                string piece_square = coordinates[final_piece].Item1;
-                int row, col, final_row, final_col;
-                string target_square = null;
-
-                if (direction == "up")
-                {
-                    row = piece_square[piece_square.Length - 1] - '0';
-                    final_row = row + quantity;
-                    target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
-                }
-                else if (direction == "down")
-                {
-                    row = piece_square[piece_square.Length - 1] - '0';
-                    final_row = row - quantity;
-                    target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
-                }
-                else if (direction == "left")
-                {
-                    col = piece_square[piece_square.Length - 2] - '0';
-                    final_col = col - quantity;
-                    char last_char = piece_square[piece_square.Length - 1];
-                    target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
-                }
-                else if (direction == "right")
-                {
-                    col = piece_square[piece_square.Length - 2] - '0';
-                    final_col = col + quantity;
-                    char last_char = piece_square[piece_square.Length - 1];
-                    target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
-                }
+            if (direction == "up")
+            {
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row + quantity;
+                target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+            }
+            else if (direction == "down")
+            {
+                row = piece_square[piece_square.Length - 1] - '0';
+                final_row = row - quantity;
+                target_square = piece_square.Remove(piece_square.Length - 1, 1) + final_row;
+            }
+            else if (direction == "left")
+            {
+                col = piece_square[piece_square.Length - 2] - '0';
+                final_col = col - quantity;
+                char last_char = piece_square[piece_square.Length - 1];
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
+            }
+            else // right
+            {
+                Console.WriteLine("ENTROU");
+                col = piece_square[piece_square.Length - 2] - '0';
+                final_col = col + quantity;
+                char last_char = piece_square[piece_square.Length - 1];
+                target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + last_char;
+            }
 
 
-                Console.WriteLine("FINAL PIECE: " + target_square);
-                move(final_piece, target_square);
-            
+            Console.WriteLine("FINAL PIECE: " + target_square);
+            move(final_piece, target_square);
         }
 
         public void two_directions(string final_piece, int quantity, string direction, string direction_2)
@@ -1029,7 +1073,7 @@ namespace AppGui
                 target_square = piece_square.Remove(piece_square.Length - 2, 2) + final_col + final_row;
             }
 
-            else if ((direction == "down" && direction_2 == "left") || (direction == "left" && direction_2 == "down"))
+            else
             {
                 col = piece_square[piece_square.Length - 2] - '0';
                 row = piece_square[piece_square.Length - 1] - '0';
@@ -1043,7 +1087,7 @@ namespace AppGui
 
 
             Console.WriteLine("FINAL PIECE: " + target_square);
-                move(final_piece, target_square);
+            move(final_piece, target_square);
             
         }
     }
